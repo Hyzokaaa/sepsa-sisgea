@@ -10,234 +10,238 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        // Provincias
-        Schema::create('provincias', function (Blueprint $table) {
+        // Provinces
+        Schema::create('provinces', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
         });
 
-        // Empresas
-        Schema::create('empresas', function (Blueprint $table) {
+        // Companies
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('siglas', 20)->nullable();
-            $table->string('direccion')->nullable();
-            $table->boolean('activo')->default(true);
-            $table->text('descripcion')->nullable();
+            $table->string('name');
+            $table->string('acronym', 20)->nullable();
+            $table->string('address')->nullable();
+            $table->boolean('active')->default(true);
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->unique(['nombre']);
+            $table->unique(['name']);
         });
 
-        // Unidades de medida
-        Schema::create('unidades_medida', function (Blueprint $table) {
+        // Measurement units
+        Schema::create('measurement_units', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('abreviatura', 15)->unique();
+            $table->string('name');
+            $table->string('abbreviation', 15)->unique();
             $table->timestamps();
         });
 
-        // UEBs (Unidades Empresariales de Base)
-        Schema::create('uebs', function (Blueprint $table) {
+        // Business units (UEBs)
+        Schema::create('business_units', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->foreignId('empresa_id')->constrained('empresas')->cascadeOnDelete();
-            $table->foreignId('provincia_id')->nullable()->constrained('provincias')->nullOnDelete();
-            $table->boolean('activo')->default(true);
+            $table->string('name');
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->foreignId('province_id')->nullable()->constrained('provinces')->nullOnDelete();
+            $table->boolean('active')->default(true);
             $table->timestamps();
-            $table->unique(['empresa_id', 'nombre']);
+            $table->unique(['company_id', 'name']);
         });
 
-        // Clientes
-        Schema::create('clientes', function (Blueprint $table) {
+        // Clients
+        Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->text('descripcion')->nullable();
-            $table->string('direccion')->nullable();
-            $table->string('siglas', 20)->nullable();
-            $table->boolean('activo')->default(true);
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('address')->nullable();
+            $table->string('acronym', 20)->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
-            $table->unique(['nombre']);
+            $table->unique(['name']);
         });
 
-        // Items (entidad base para productos y grupos)
+        // Items (base entity for products and groups)
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->text('descripcion')->nullable();
-            $table->foreignId('unidad_medida_id')->nullable()->constrained('unidades_medida')->nullOnDelete();
-            $table->enum('tipo', ['producto', 'grupo']);
-            $table->boolean('activo')->default(true);
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->foreignId('measurement_unit_id')->nullable()->constrained('measurement_units')->nullOnDelete();
+            $table->enum('type', ['product', 'group']);
+            $table->boolean('active')->default(true);
             $table->timestamps();
-            $table->index('tipo');
+            $table->index('type');
         });
 
-        // Grupos (especialización de items)
-        Schema::create('grupos', function (Blueprint $table) {
+        // Groups (item specialization)
+        Schema::create('groups', function (Blueprint $table) {
             $table->unsignedBigInteger('item_id')->primary();
             $table->foreign('item_id')->references('id')->on('items')->cascadeOnDelete();
-            $table->unsignedBigInteger('grupo_padre_id')->nullable();
-            $table->foreign('grupo_padre_id')->references('item_id')->on('grupos')->nullOnDelete();
-            $table->index('grupo_padre_id');
+            $table->unsignedBigInteger('parent_group_id')->nullable();
+            $table->index('parent_group_id');
+        });
+        
+        // Add self-referencing foreign key after table creation
+        Schema::table('groups', function (Blueprint $table) {
+            $table->foreign('parent_group_id')->references('item_id')->on('groups')->nullOnDelete();
         });
 
-        // Productos (especialización de items)
-        Schema::create('productos', function (Blueprint $table) {
+        // Products (item specialization)
+        Schema::create('products', function (Blueprint $table) {
             $table->unsignedBigInteger('item_id')->primary();
             $table->foreign('item_id')->references('id')->on('items')->cascadeOnDelete();
-            $table->string('codigo', 50)->unique();
-            $table->string('imagen')->nullable();
-            $table->unsignedBigInteger('grupo_id')->nullable();
-            $table->foreign('grupo_id')->references('item_id')->on('grupos')->nullOnDelete();
-            $table->index('grupo_id');
+            $table->string('code', 50)->unique();
+            $table->string('image')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('item_id')->on('groups')->nullOnDelete();
+            $table->index('group_id');
         });
 
-        // Periodos de planificación / demanda
-        Schema::create('periodos', function (Blueprint $table) {
+        // Planning/demand periods
+        Schema::create('periods', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique();
-            $table->date('fecha_inicio');
-            $table->date('fecha_fin');
+            $table->string('name')->unique();
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
-            $table->index(['fecha_inicio', 'fecha_fin']);
+            $table->index(['start_date', 'end_date']);
         });
 
-        // Planificaciones (por UEB, periodo y item - puede ser producto o grupo) con valores plan y pronostico
-        Schema::create('planificaciones', function (Blueprint $table) {
+        // Planning (by business unit, period and item - can be product or group) with plan and forecast values
+        Schema::create('plannings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ueb_id')->constrained('uebs')->cascadeOnDelete();
-            $table->foreignId('periodo_id')->constrained('periodos')->cascadeOnDelete();
+            $table->foreignId('business_unit_id')->constrained('business_units')->cascadeOnDelete();
+            $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->decimal('plan', 15, 3)->default(0); // valor planificado
-            $table->decimal('pronostico', 15, 3)->default(0); // valor pronosticado
-            $table->string('estado', 30)->default('borrador');
+            $table->decimal('plan', 15, 3)->default(0); // planned value
+            $table->decimal('forecast', 15, 3)->default(0); // forecasted value
+            $table->string('status', 30)->default('draft');
             $table->timestamps();
-            $table->unique(['ueb_id', 'periodo_id', 'item_id']);
+            $table->unique(['business_unit_id', 'period_id', 'item_id']);
         });
 
-        // Demandas (por cliente, periodo e item - producto o grupo)
-        Schema::create('demandas', function (Blueprint $table) {
+        // Demands (by client, period and item - product or group)
+        Schema::create('demands', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();
-            $table->foreignId('periodo_id')->constrained('periodos')->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
+            $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->decimal('cantidad', 15, 3)->default(0);
+            $table->decimal('quantity', 15, 3)->default(0);
             $table->timestamps();
-            $table->unique(['cliente_id', 'periodo_id', 'item_id']);
+            $table->unique(['client_id', 'period_id', 'item_id']);
         });
 
-        // Inventarios (stock por UEB y producto)
-        Schema::create('inventarios', function (Blueprint $table) {
+        // Inventories (stock by business unit and product)
+        Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ueb_id')->constrained('uebs')->cascadeOnDelete();
-            $table->unsignedBigInteger('producto_id');
-            $table->foreign('producto_id')->references('item_id')->on('productos')->cascadeOnDelete();
-            $table->decimal('cantidad', 15, 3)->default(0);
-            $table->decimal('costo_unitario', 15, 4)->nullable();
+            $table->foreignId('business_unit_id')->constrained('business_units')->cascadeOnDelete();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('item_id')->on('products')->cascadeOnDelete();
+            $table->decimal('quantity', 15, 3)->default(0);
+            $table->decimal('unit_cost', 15, 4)->nullable();
             $table->timestamps();
-            $table->unique(['ueb_id', 'producto_id']);
+            $table->unique(['business_unit_id', 'product_id']);
         });
 
-        // Recetas (para elaboración de un producto final)
-        Schema::create('recetas', function (Blueprint $table) {
+        // Recipes (for manufacturing a final product)
+        Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('producto_id');
-            $table->foreign('producto_id')->references('item_id')->on('productos')->cascadeOnDelete();
-            $table->string('nombre')->nullable();
-            $table->text('descripcion')->nullable();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('item_id')->on('products')->cascadeOnDelete();
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->unique(['producto_id']);
+            $table->unique(['product_id']);
         });
 
-        // Detalle de recetas (componentes: item puede ser producto o grupo)
-        Schema::create('receta_items', function (Blueprint $table) {
+        // Recipe detail (components: item can be product or group)
+        Schema::create('recipe_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('receta_id')->constrained('recetas')->cascadeOnDelete();
+            $table->foreignId('recipe_id')->constrained('recipes')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->decimal('cantidad', 15, 4)->default(0);
+            $table->decimal('quantity', 15, 4)->default(0);
             $table->timestamps();
-            $table->unique(['receta_id', 'item_id']);
+            $table->unique(['recipe_id', 'item_id']);
         });
 
-        // Operaciones (tabla base CTI)
-        Schema::create('operaciones', function (Blueprint $table) {
+        // Operations (CTI base table)
+        Schema::create('operations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ueb_id')->constrained('uebs')->cascadeOnDelete(); // origen
-            $table->enum('tipo', ['traslado', 'venta', 'produccion', 'elaboracion']);
-            $table->dateTime('fecha')->nullable();
-            $table->text('notas')->nullable();
+            $table->foreignId('business_unit_id')->constrained('business_units')->cascadeOnDelete(); // origin
+            $table->enum('type', ['transfer', 'sale', 'production', 'manufacture']);
+            $table->dateTime('date')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
-            $table->index(['tipo', 'fecha']);
+            $table->index(['type', 'date']);
         });
 
-        // Traslados (especialización)
-        Schema::create('traslados', function (Blueprint $table) {
-            $table->unsignedBigInteger('operacion_id')->primary();
-            $table->foreign('operacion_id')->references('id')->on('operaciones')->cascadeOnDelete();
-            $table->foreignId('destino_ueb_id')->constrained('uebs')->cascadeOnDelete();
+        // Transfers (specialization)
+        Schema::create('transfers', function (Blueprint $table) {
+            $table->unsignedBigInteger('operation_id')->primary();
+            $table->foreign('operation_id')->references('id')->on('operations')->cascadeOnDelete();
+            $table->foreignId('destination_business_unit_id')->constrained('business_units')->cascadeOnDelete();
         });
 
-        // Ventas (especialización)
-        Schema::create('ventas', function (Blueprint $table) {
-            $table->unsignedBigInteger('operacion_id')->primary();
-            $table->foreign('operacion_id')->references('id')->on('operaciones')->cascadeOnDelete();
-            $table->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();
+        // Sales (specialization)
+        Schema::create('sales', function (Blueprint $table) {
+            $table->unsignedBigInteger('operation_id')->primary();
+            $table->foreign('operation_id')->references('id')->on('operations')->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
         });
 
-        // Producciones (especialización)
-        Schema::create('producciones', function (Blueprint $table) {
-            $table->unsignedBigInteger('operacion_id')->primary();
-            $table->foreign('operacion_id')->references('id')->on('operaciones')->cascadeOnDelete();
-            // Campos futuros específicos de producción pueden añadirse aquí
+        // Productions (specialization)
+        Schema::create('productions', function (Blueprint $table) {
+            $table->unsignedBigInteger('operation_id')->primary();
+            $table->foreign('operation_id')->references('id')->on('operations')->cascadeOnDelete();
+            // Future production-specific fields can be added here
         });
 
-        // Elaboraciones (especialización con receta)
-        Schema::create('elaboraciones', function (Blueprint $table) {
-            $table->unsignedBigInteger('operacion_id')->primary();
-            $table->foreign('operacion_id')->references('id')->on('operaciones')->cascadeOnDelete();
-            $table->foreignId('receta_id')->constrained('recetas')->cascadeOnDelete();
+        // Manufactures (specialization with recipe)
+        Schema::create('manufactures', function (Blueprint $table) {
+            $table->unsignedBigInteger('operation_id')->primary();
+            $table->foreign('operation_id')->references('id')->on('operations')->cascadeOnDelete();
+            $table->foreignId('recipe_id')->constrained('recipes')->cascadeOnDelete();
         });
 
-        // Detalle de operaciones (items afectados con cantidades +/-)
-        Schema::create('operacion_items', function (Blueprint $table) {
+        // Operation detail (items affected with quantities +/-)
+        Schema::create('operation_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('operacion_id')->constrained('operaciones')->cascadeOnDelete();
+            $table->foreignId('operation_id')->constrained('operations')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->decimal('cantidad', 15, 3);
-            $table->string('rol', 30)->nullable(); // ej: origen/destino/consumo/producido
+            $table->decimal('quantity', 15, 3);
+            $table->string('role', 30)->nullable(); // e.g.: origin/destination/consumption/produced
             $table->timestamps();
-            $table->index(['operacion_id', 'item_id']);
+            $table->index(['operation_id', 'item_id']);
         });
 
         // Roles
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('name');
             $table->string('slug')->unique();
             $table->timestamps();
-            $table->unique(['nombre']);
+            $table->unique(['name']);
         });
 
-        // Accesos (permisos de alto nivel)
-        Schema::create('accesos', function (Blueprint $table) {
+        // Access permissions (high level)
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('name');
             $table->string('slug')->unique();
-            $table->text('descripcion')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->unique(['nombre']);
+            $table->unique(['name']);
         });
 
-        // Pivot rol-acceso
-        Schema::create('acceso_role', function (Blueprint $table) {
+        // Pivot role-permission
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
-            $table->foreignId('acceso_id')->constrained('accesos')->cascadeOnDelete();
+            $table->foreignId('permission_id')->constrained('permissions')->cascadeOnDelete();
             $table->timestamps();
-            $table->unique(['role_id', 'acceso_id']);
+            $table->unique(['role_id', 'permission_id']);
         });
 
-        // Pivot role-user (users table ya existe por Laravel)
+        // Pivot role-user (users table already exists by Laravel)
         Schema::create('role_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
@@ -253,28 +257,28 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('role_user');
-        Schema::dropIfExists('acceso_role');
-        Schema::dropIfExists('accesos');
+        Schema::dropIfExists('permission_role');
+        Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('operacion_items');
-        Schema::dropIfExists('elaboraciones');
-        Schema::dropIfExists('producciones');
-        Schema::dropIfExists('ventas');
-        Schema::dropIfExists('traslados');
-        Schema::dropIfExists('operaciones');
-        Schema::dropIfExists('receta_items');
-        Schema::dropIfExists('recetas');
-        Schema::dropIfExists('inventarios');
-        Schema::dropIfExists('demandas');
-        Schema::dropIfExists('planificaciones');
-        Schema::dropIfExists('periodos');
-        Schema::dropIfExists('productos');
-        Schema::dropIfExists('grupos');
+        Schema::dropIfExists('operation_items');
+        Schema::dropIfExists('manufactures');
+        Schema::dropIfExists('productions');
+        Schema::dropIfExists('sales');
+        Schema::dropIfExists('transfers');
+        Schema::dropIfExists('operations');
+        Schema::dropIfExists('recipe_items');
+        Schema::dropIfExists('recipes');
+        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('demands');
+        Schema::dropIfExists('plannings');
+        Schema::dropIfExists('periods');
+        Schema::dropIfExists('products');
+        Schema::dropIfExists('groups');
         Schema::dropIfExists('items');
-        Schema::dropIfExists('clientes');
-        Schema::dropIfExists('uebs');
-        Schema::dropIfExists('unidades_medida');
-        Schema::dropIfExists('empresas');
-        Schema::dropIfExists('provincias');
+        Schema::dropIfExists('clients');
+        Schema::dropIfExists('business_units');
+        Schema::dropIfExists('measurement_units');
+        Schema::dropIfExists('companies');
+        Schema::dropIfExists('provinces');
     }
 };
