@@ -10,4 +10,9 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+
+    input: [
+        // ...existing files,
+        'vendor/resma/filament-awin-theme/resources/css/theme.css'
+    ],
 });
