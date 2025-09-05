@@ -15,7 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
+use UnitEnum;
 
 
 
@@ -24,6 +24,8 @@ class ProvinciaResource extends Resource
     protected static ?string $model = Provincia::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Administracion';
 
     public static function form(Schema $schema): Schema
     {

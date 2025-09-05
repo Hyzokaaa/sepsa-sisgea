@@ -11,8 +11,6 @@ class GrupoProducto extends Model
     protected $table = 'grupo_productos';
 
     protected $fillable = [
-        'unidad_medidas_id',
-        'padre_id',
         'name',
         'codigo',
         'descripcion',

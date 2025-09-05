@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\GrupoProductos\Pages;
 
 use App\Filament\Resources\GrupoProductos\GrupoProductoResource;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
 
-class ManageGrupoProductos extends ManageRecords
+class EditGrupoProducto extends EditRecord
 {
     protected static string $resource = GrupoProductoResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            DeleteAction::make(),
         ];
     }
 }
