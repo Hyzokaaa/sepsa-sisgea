@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Filament\Resources\Almacens\Schemas;
+
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Schema;
+
+class AlmacenForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Select::make('ueb_id')
+                    ->relationship('ueb', 'name')
+                    ->required(),
+                TextInput::make('nombre')
+                    ->required(),
+                Textarea::make('observacion')
+                    ->columnSpanFull(),
+                Toggle::make('activo')
+                    ->required(),
+            ]);
+    }
+}
