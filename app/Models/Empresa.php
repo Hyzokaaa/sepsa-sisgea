@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Ueb extends Model
+class Empresa extends Model
 {
-    protected $table = 'uebs';
+    protected $table = 'empresas';
 
     protected $fillable = [
-        'empresa_id',
         'provincia_id',
         'name',
         'siglas',
@@ -26,28 +25,25 @@ class Ueb extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function empresa(): BelongsTo
-    {
-        return $this->belongsTo(Empresa::class);
-    }
-
     public function provincia(): BelongsTo
     {
         return $this->belongsTo(Provincia::class);
     }
 
-    public function planificaciones(): HasMany
+    public function uebs(): HasMany
     {
-        return $this->hasMany(Planificacion::class);
+        return $this->hasMany(Ueb::class);
     }
 
-    public function demandas(): HasMany
+    public static function rules($empresaId = null)
     {
-        return $this->hasMany(Demanda::class);
-    }
-
-    public function almacenes(): HasMany
-    {
-        return $this->hasMany(Almacen::class);
+        return [
+            'provincia_id' => 'nullable|exists:provincias,id',
+            'name' => 'required|string|max:255|unique:empresas,name,' . $empresaId,
+            'siglas' => 'nullable|string|max:20',
+            'direccion' => 'nullable|string|max:255',
+            'activo' => 'boolean',
+            'descripcion' => 'nullable|string',
+        ];
     }
 }
