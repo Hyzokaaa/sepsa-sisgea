@@ -177,12 +177,14 @@ return new class extends Migration
         // Operations (movements in inventory)
         Schema::create('operacions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->date('fecha');
             $table->enum('tipo_operacion', ['venta', 'produccion', 'elaboracion', 'traslado', 'compra']);
             $table->foreignId('almacen_id')->constrained()->cascadeOnDelete();
             $table->string('origen_destino_tipo')->nullable(); // cliente, proveedor, otro almacén
             $table->unsignedBigInteger('origen_destino_id')->nullable(); // ID del cliente, proveedor o almacén
             $table->text('observacion')->nullable();
+            $table->float('importe')->default(0);
             $table->boolean('cerrado')->default(false);
             $table->timestamps();
         });
