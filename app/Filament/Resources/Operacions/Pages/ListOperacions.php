@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Operacions\Pages;
 
+use App\Filament\Actions\TrasladoAction;
 use App\Filament\Actions\VentaAction;
 use App\Filament\Resources\Operacions\OperacionResource;
 use Filament\Actions\CreateAction;
@@ -19,6 +20,8 @@ class ListOperacions extends ListRecords
             CompraAction::make('Compra')
                 ->color('info'),
             VentaAction::make('Venta')
+                ->color('primary'),
+            TrasladoAction::make('Traslado')
                 ->color('primary')
         ];
     }

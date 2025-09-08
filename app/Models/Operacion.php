@@ -19,6 +19,8 @@ class Operacion extends Model
         'origen_destino_id',
         'observacion',
         'cerrado',
+        'importe',
+
     ];
 
     protected $casts = [
