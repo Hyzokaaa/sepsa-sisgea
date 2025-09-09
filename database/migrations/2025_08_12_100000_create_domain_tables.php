@@ -67,7 +67,7 @@ return new class extends Migration
         // Groups
         Schema::create('grupo_productos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('unidad_medidas_id')->constrained()->nullOnDelete();
+             $table->foreignId('unidad_medidas_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('padre_id')->nullable()->constrained('grupo_productos')->nullOnDelete();
             $table->string('name');
             $table->string('codigo');
@@ -177,7 +177,7 @@ return new class extends Migration
         // Operations (movements in inventory)
         Schema::create('operacions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->date('fecha');
             $table->enum('tipo_operacion', ['venta', 'produccion', 'elaboracion', 'traslado', 'compra']);
             $table->foreignId('almacen_id')->constrained()->cascadeOnDelete();
