@@ -28,6 +28,9 @@ class OperacionsTable
                 TextColumn::make('origen_destino_id')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('importe')
+                    ->numeric()
+                    ->sortable(),
                 IconColumn::make('cerrado')
                     ->boolean(),
                 TextColumn::make('created_at')

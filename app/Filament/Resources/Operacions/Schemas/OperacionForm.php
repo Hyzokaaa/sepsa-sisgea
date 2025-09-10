@@ -25,6 +25,8 @@ class OperacionForm
                 TextInput::make('origen_destino_tipo'),
                 TextInput::make('origen_destino_id')
                     ->numeric(),
+                TextInput::make('importe')
+                    ->numeric(),
                 Textarea::make('observacion')
                     ->columnSpanFull(),
                 Toggle::make('cerrado')
