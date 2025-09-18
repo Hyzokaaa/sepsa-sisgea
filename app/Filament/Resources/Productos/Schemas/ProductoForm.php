@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Productos\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -13,11 +14,12 @@ class ProductoForm
     {
         return $schema
             ->components([
-                TextInput::make('grupo_productos_id')
-                    ->numeric(),
-                TextInput::make('unidad_medidas_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('grupo_productos_id')
+                    ->relationship('grupoProducto', 'name')
+                    ->required(),
+                Select::make('unidad_medidas_id')
+                    ->relationship('unidadMedida', 'siglas')
+                    ->required(),
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('codigo')

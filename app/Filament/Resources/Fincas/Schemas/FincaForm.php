@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\GrupoProductos\Schemas;
+namespace App\Filament\Resources\Fincas\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -8,24 +8,26 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
-class GrupoProductoForm
+class FincaForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Select::make('unidad_medidas_id')
-                  ->relationship('unidadMedida', 'siglas'),
-                Select::make('padre_id')
-                    ->relationship('padre', 'name'),
-                TextInput::make('name')
+                Select::make('ueb_id')
+                    ->relationship('ueb', 'name')
                     ->required(),
-                TextInput::make('codigo')
+                TextInput::make('nombre')
                     ->required(),
-                Textarea::make('descripcion')
+                TextInput::make('siglas')
+                    ->required(),
+                Textarea::make('direccion')
+                    ->required()
                     ->columnSpanFull(),
                 Toggle::make('activo')
                     ->required(),
+                Textarea::make('descripcion')
+                    ->columnSpanFull(),
             ]);
     }
 }

@@ -67,7 +67,7 @@ return new class extends Migration
         // Groups
         Schema::create('grupo_productos', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('unidad_medidas_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('unidad_medidas_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('padre_id')->nullable()->constrained('grupo_productos')->nullOnDelete();
             $table->string('name');
             $table->string('codigo');
@@ -200,6 +200,17 @@ return new class extends Migration
             $table->text('observacion')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('fincas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ueb_id')->constrained();
+            $table->string('nombre');
+            $table->string('siglas');
+            $table->text('direccion');
+            $table->boolean('activo')->default(true);
+            $table->text('descripcion')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -224,5 +235,6 @@ return new class extends Migration
         Schema::dropIfExists('uebs');
         Schema::dropIfExists('empresas');
         Schema::dropIfExists('provincias');
+        Schema::dropIfExists('fincas');
     }
 };

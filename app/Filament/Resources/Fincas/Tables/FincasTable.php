@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\GrupoProductos\Tables;
+namespace App\Filament\Resources\Fincas\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -9,19 +9,18 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class GrupoProductosTable
+class FincasTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('unidadMedida.name')
+                TextColumn::make('ueb.name')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('padre.name')
-                    ->sortable(),
-                TextColumn::make('name')
+                TextColumn::make('nombre')
                     ->searchable(),
-                TextColumn::make('codigo')
+                TextColumn::make('siglas')
                     ->searchable(),
                 IconColumn::make('activo')
                     ->boolean(),
