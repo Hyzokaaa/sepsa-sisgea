@@ -212,7 +212,7 @@ class VentaAction
                     'origen_destino_id' => $data['origen_destino_id'] ?? null,
                     'importe' => $data['importe_total'],
                     'observacion' => $data['observacion'] ?? false,
-//                    'executed_by' => auth()->id(),
+                    'user_id' => auth()->id(),
                     'fecha' => $data['fecha'],
                     'cerrado' => false,
                 ]);

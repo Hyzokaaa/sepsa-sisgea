@@ -211,7 +211,7 @@ class TrasladoAction
                     'observacion' => $data['observacion'],
                     'almacen_id' => $data['almacen_id'],
                     'importe' => $data['importe_total'],
-                    //                    'executed_by' => auth()->id(),
+                    'user_id' => auth()->id(),
                     'fecha' =>  $data['fecha'],
                     'cerrado' => false,
                 ]);
@@ -222,6 +222,7 @@ class TrasladoAction
 
                 $incomingOperation = Operacion::create([
                     'tipo_operacion' => 'traslado',
+                    'user_id' => auth()->id(),
                     'origen_destino_tipo' => $data['origen_destino_tipo'],
                     'origen_destino_id' => $data['almacen_id'],
                     'observacion' => $data['observacion'],

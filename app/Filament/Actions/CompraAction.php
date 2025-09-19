@@ -134,6 +134,7 @@ class CompraAction
                     'almacen_id' => $data['almacen_id'],
                     'importe' => $total,
                     'fecha' => $data['fecha'],
+                    'user_id' => auth()->id(),
                     'cerrado' => false,
                     'observacion' => $data['observacion'],
                 ]);

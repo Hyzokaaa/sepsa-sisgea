@@ -22,7 +22,7 @@ class ListOperacions extends ListRecords
             VentaAction::make('Venta')
                 ->color('primary'),
             TrasladoAction::make('Traslado')
-                ->color('primary')
+                ->color('warning')
         ];
     }
 }

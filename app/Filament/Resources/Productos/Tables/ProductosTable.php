@@ -28,6 +28,23 @@ class ProductosTable
                     ->searchable(),
                 IconColumn::make('activo')
                     ->boolean(),
+                TextColumn::make('ingredientess')
+                    ->label('Ingredientes')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->html()
+                    ->default('-')
+                    ->formatStateUsing(function ($state, $record) {
+                        $ingredientes = $record->ingredientess()->withPivot('cantidad')->get();
+
+                        if ($ingredientes->isEmpty()) {
+                            return '<span class="text-gray-400">Sin ingredientes</span>';
+                        }
+
+                        return $ingredientes->map(function ($ingrediente) {
+                            return "<div><strong>{$ingrediente->name}</strong>: {$ingrediente->pivot->cantidad}</div>";
+                        })->implode('');
+                    })
+                    ->wrap(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -28,12 +28,25 @@ class ProductoForm
                     ->required(),
                 TextInput::make('imagen'),
 
+
+
+                Textarea::make('descripcion')
+                    ->columnSpanFull(),
+
                 Repeater::make('ingredientes')
+                    ->columnSpanFull()
                     ->relationship('ingredientes')
                     ->schema([
-                        TextInput::make('nombre')
-                            ->label('Nombre del Ingrediente')
-                            ->maxLength(255),
+                        Select::make('ingrediente_id')
+                            ->options(Producto::query()
+                                ->orderBy('name')
+                                ->get()
+                                ->mapWithKeys(function ($producto) {
+                                    return [
+                                        $producto->id => "{$producto->codigo} - \${$producto->name}"
+                                    ];
+                                }))
+                            ->label('Nombre del Ingrediente'),
 
                         TextInput::make('cantidad')
                             ->label('Cantidad')
@@ -43,12 +56,9 @@ class ProductoForm
                     ])
                     ->columns(2)
                     ->addActionLabel('Añadir Ingrediente')
-                    ->defaultItems(1)
+                    ->defaultItems(0)
                     ->collapsible()
                     ->reorderable(true),
-
-                Textarea::make('descripcion')
-                    ->columnSpanFull(),
                 Toggle::make('activo')
                     ->required(),
             ]);

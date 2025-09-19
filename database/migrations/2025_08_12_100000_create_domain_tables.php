@@ -207,7 +207,7 @@ return new class extends Migration
             $table->foreignId('ueb_id')->constrained();
             $table->string('nombre');
             $table->string('siglas');
-            $table->text('direccion');
+            $table->text('direccion')->nullable();
             $table->boolean('activo')->default(true);
             $table->text('descripcion')->nullable();
             $table->timestamps();

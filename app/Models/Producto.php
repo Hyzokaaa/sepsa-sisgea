@@ -49,12 +49,22 @@ class Producto extends Model
     public function ingredientes(): HasMany
     {
         return $this->hasMany(ProductoIngrediente::class, 'producto_id');
+
     }
 
-    public function comoIngrediente(): HasMany
+//    public function ingredientes(): HasMany
+//    {
+//        return $this->hasMany(ProductoIngrediente::class, 'ingrediente_id');
+//
+//    }
+
+    public function ingredientess()
     {
-        return $this->hasMany(ProductoIngrediente::class, 'ingrediente_id');
+        return $this->belongsToMany(Producto::class, 'producto_ingredientes', 'producto_id','ingrediente_id')
+            ->withPivot(['cantidad']) // Cantidad requerida del ingrediente
+            ->withTimestamps();
     }
+
 
     public function planificacionDetalles()
     {
