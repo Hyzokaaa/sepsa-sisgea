@@ -22,7 +22,6 @@ class FincaForm
                 TextInput::make('siglas')
                     ->required(),
                 Textarea::make('direccion')
-                    ->required()
                     ->columnSpanFull(),
                 Toggle::make('activo')
                     ->required(),

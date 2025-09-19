@@ -20,6 +20,7 @@ class ClienteResource extends Resource
     protected static ?string $model = Cliente::class;
 
     protected static string | UnitEnum | null $navigationGroup = 'Administracion';
+    protected static ?int $navigationSort = 5;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

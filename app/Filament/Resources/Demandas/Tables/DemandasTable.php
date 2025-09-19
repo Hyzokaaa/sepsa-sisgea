@@ -17,8 +17,7 @@ class DemandasTable
                 TextColumn::make('ueb.name')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('periodo.id')
-                    ->numeric()
+                TextColumn::make('Periodo.ejercicio')
                     ->sortable(),
                 TextColumn::make('cliente.name')
                     ->numeric()

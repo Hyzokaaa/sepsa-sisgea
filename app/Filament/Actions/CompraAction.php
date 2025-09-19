@@ -62,7 +62,7 @@ class CompraAction
                             ->get()
                             ->mapWithKeys(function ($producto) {
                                 return [
-                                    $producto->id => "{$producto->codigo} - {$producto->nombre}"
+                                    $producto->id => "{$producto->codigo} - \${$producto->name}"
                                 ];
                             }))
                         ->required()

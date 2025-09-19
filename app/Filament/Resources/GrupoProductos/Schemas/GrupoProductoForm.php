@@ -15,7 +15,7 @@ class GrupoProductoForm
         return $schema
             ->components([
                 Select::make('unidad_medidas_id')
-                  ->relationship('unidadMedida', 'siglas'),
+                  ->relationship('unidadMedida', 'name'),
                 Select::make('padre_id')
                     ->relationship('padre', 'name'),
                 TextInput::make('name')

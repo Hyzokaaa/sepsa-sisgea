@@ -19,7 +19,8 @@ class DemandaResource extends Resource
 {
     protected static ?string $model = Demanda::class;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Administracion';
+    protected static string | UnitEnum | null $navigationGroup = 'Gestion';
+    protected static ?int $navigationSort = 5;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -13,7 +13,7 @@ class PlanificacionForm
         return $schema
             ->components([
                 Select::make('periodo_id')
-                    ->relationship('periodo', 'id')
+                    ->relationship('periodo', 'ejercicio')
                     ->required(),
                 Select::make('ueb_id')
                     ->relationship('ueb', 'name')

@@ -14,7 +14,7 @@ class InventariosTable
     {
         return $table
             ->columns([
-                TextColumn::make('almacen.id')
+                TextColumn::make('almacen.nombre')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('producto.name')

@@ -13,7 +13,7 @@ class InventarioForm
         return $schema
             ->components([
                 Select::make('almacen_id')
-                    ->relationship('almacen', 'id')
+                    ->relationship('almacen', 'nombre')
                     ->required(),
                 Select::make('producto_id')
                     ->relationship('producto', 'name')

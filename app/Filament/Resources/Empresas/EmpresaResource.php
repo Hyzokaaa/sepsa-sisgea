@@ -20,6 +20,7 @@ class EmpresaResource extends Resource
     protected static ?string $model = Empresa::class;
 
     protected static string | UnitEnum | null $navigationGroup = 'Administracion';
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

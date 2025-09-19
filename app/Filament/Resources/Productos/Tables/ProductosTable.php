@@ -15,11 +15,10 @@ class ProductosTable
     {
         return $table
             ->columns([
-                TextColumn::make('grupo_productos_id')
+                TextColumn::make('grupoProducto.name')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('unidad_medidas_id')
-                    ->numeric()
+                TextColumn::make('unidadMedida.name')
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),

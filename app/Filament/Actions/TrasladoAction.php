@@ -58,7 +58,7 @@ class TrasladoAction
                     ->get()
                     ->mapWithKeys(function ($almacen) {
                         return [
-                            $almacen->id => "{$almacen->id} - {$almacen->nombre}"
+                            $almacen->id => "{$almacen->id} - {$almacen->name}"
                         ];
                     }))
                 ->required()

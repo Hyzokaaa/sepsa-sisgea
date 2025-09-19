@@ -14,7 +14,7 @@ class PlanificacionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('periodo.id')
+                TextColumn::make('periodo.ejercicio')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('ueb.name')

@@ -25,6 +25,8 @@ class ProvinciaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?int $navigationSort = 1;
+
     protected static string | UnitEnum | null $navigationGroup = 'Administracion';
 
     public static function form(Schema $schema): Schema

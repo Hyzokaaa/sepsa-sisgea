@@ -19,9 +19,9 @@ class AlmacenResource extends Resource
 {
     protected static ?string $model = Almacen::class;
 
+            protected static ?int $navigationSort = 6;
 
-
-    protected static string | UnitEnum | null $navigationGroup = 'Gestion';
+    protected static string | UnitEnum | null $navigationGroup = 'Administracion';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

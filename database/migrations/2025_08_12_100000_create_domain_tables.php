@@ -168,10 +168,11 @@ return new class extends Migration
         // Product ingredients (for products that are made from other products)
         Schema::create('producto_ingredientes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('producto_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('ingrediente_id')->constrained('productos')->cascadeOnDelete();
+            $table->foreignId('producto_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ingrediente_id')->constrained('productos')->onDelete('cascade');
             $table->decimal('cantidad', 15, 2)->default(0);
             $table->timestamps();
+            $table->unique(['producto_id', 'ingrediente_id']);
         });
 
         // Operations (movements in inventory)

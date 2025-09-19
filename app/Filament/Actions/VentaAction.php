@@ -106,7 +106,7 @@ class VentaAction
 
                             return $query->get()
                                 ->mapWithKeys(fn (Producto $producto) => [
-                                    $producto->id => "{$producto->codigo} - \${$producto->nombre}"
+                                    $producto->id => "{$producto->codigo} - \${$producto->name}"
                                 ]);
                         })
 

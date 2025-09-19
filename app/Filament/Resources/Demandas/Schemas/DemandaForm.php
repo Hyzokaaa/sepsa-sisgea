@@ -16,7 +16,7 @@ class DemandaForm
                     ->relationship('ueb', 'name')
                     ->required(),
                 Select::make('periodo_id')
-                    ->relationship('periodo', 'id')
+                    ->relationship('periodo', 'ejercicio')
                     ->required(),
                 Select::make('cliente_id')
                     ->relationship('cliente', 'name')
