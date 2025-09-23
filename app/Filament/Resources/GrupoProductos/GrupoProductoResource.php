@@ -19,6 +19,7 @@ class GrupoProductoResource extends Resource
 {
        protected static string | UnitEnum | null $navigationGroup = 'Nomencladores';
     protected static ?string $model = GrupoProducto::class;
+            protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

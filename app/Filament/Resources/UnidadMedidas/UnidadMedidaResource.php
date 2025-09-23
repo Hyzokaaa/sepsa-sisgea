@@ -20,6 +20,7 @@ class UnidadMedidaResource extends Resource
     protected static ?string $model = UnidadMedida::class;
 
     protected static string | UnitEnum | null $navigationGroup = 'Nomencladores';
+            protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -20,7 +20,7 @@ class FincaForm
                 TextInput::make('nombre')
                     ->required(),
                 TextInput::make('siglas')
-                    ->required(),
+                ->required(),
                 Textarea::make('direccion')
                     ->columnSpanFull(),
                 Toggle::make('activo')

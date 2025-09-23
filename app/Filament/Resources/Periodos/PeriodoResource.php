@@ -19,6 +19,7 @@ class PeriodoResource extends Resource
 {
     protected static ?string $model = Periodo::class;
     protected static string | UnitEnum | null $navigationGroup = 'Nomencladores';
+            protected static ?int $navigationSort = 4;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

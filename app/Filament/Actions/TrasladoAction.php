@@ -58,7 +58,7 @@ class TrasladoAction
                     ->get()
                     ->mapWithKeys(function ($almacen) {
                         return [
-                            $almacen->id => "{$almacen->id} - {$almacen->name}"
+                            $almacen->id => "{$almacen->id} - {$almacen->nombre}"
                         ];
                     }))
                 ->required()
@@ -109,7 +109,7 @@ class TrasladoAction
 
                             return $query->get()
                                 ->mapWithKeys(fn(Producto $producto) => [
-                                    $producto->id => "{$producto->codigo} - \${$producto->nombre}"
+                                    $producto->id => "{$producto->codigo} - \${$producto->name}"
                                 ]);
                         })
 

@@ -20,6 +20,7 @@ class Operacion extends Model
         'observacion',
         'cerrado',
         'importe',
+        'user_id'
 
     ];
 
@@ -28,6 +29,7 @@ class Operacion extends Model
         'cerrado' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'user_id' => 'integer',
     ];
 
     public function almacen(): BelongsTo
