@@ -20,7 +20,7 @@ class OperacionsTable
                     ->sortable(),
                 TextColumn::make('tipo_operacion')
                     ->searchable(),
-                TextColumn::make('almacen.id')
+                TextColumn::make('almacen.nombre')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('origen_destino_tipo')

@@ -15,6 +15,7 @@ class Operacion extends Model
         'fecha',
         'tipo_operacion',
         'almacen_id',
+        'user_id',
         'origen_destino_tipo',
         'origen_destino_id',
         'observacion',
